@@ -574,10 +574,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             GetPlayer()->Yell(msg, lang);
 
-            if (lang != LANG_ADDON)
+            if (lang != LANG_ADDON && !IsFingerprintBanned())
                 ScriptRegistry<PlayerScript>::ForEachEnabledHook(PLAYERHOOK_ON_CHAT_YELL,
                     [&](PlayerScript* s) { s->OnChatYell(GetPlayer(),
-                        sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_YELL), msg.c_str()); });
+                        GetPlayer()->GetYellRange(), msg.c_str()); });
 
             if (lang != LANG_ADDON)
             {
